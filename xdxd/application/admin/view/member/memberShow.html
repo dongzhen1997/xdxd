@@ -1,0 +1,43 @@
+{include file="common/meta"/}
+<title>xdxd - 用户查看</title>
+</head>
+<body>
+<div class="cl pd-20" style=" background-color:#5bacb6">
+  <img class="avatar size-XL l" src="{if $memberDetail.headimg eq null}__STATIC__/admin/img/member/3.jpeg{else /}__STATIC__/uploads/admin/{$memberDetail.headimg}{/if}">
+  <dl style="margin-left:80px; color:#fff">
+    <dt>
+      <span class="f-18">{$memberDetail.username}</span>
+      <span class="pl-10 f-18 ml-40">实名：{if $memberDetail.trueName eq null}***(保密){else /}{$memberDetail.trueName}{/if}</span>
+      <span class="pl-10 f-12 ml-40">余额：{$memberDetail.money}元</span>
+    </dt>
+    <dd class="pt-10 f-12" style="margin-left:0">这家伙很懒，什么也没有留下</dd>
+  </dl>
+</div>
+<div class="pd-20">
+  <table class="table">
+    <tbody>
+      <tr>
+        <th class="text-r" width="80">性别：</th>
+        <td>{eq name="$memberDetail.sex" value="0"} 男 {else/} 女 {/eq}</td>
+      </tr>
+      <tr>
+        <th class="text-r">手机：</th>
+        <td>{$memberDetail.tel}</td>
+      </tr>
+      <tr>
+        <th class="text-r">邮箱：</th>
+        <td>{$memberDetail.email}</td>
+      </tr>
+      <tr>
+        <th class="text-r">积分：</th>
+        <td>{$memberDetail.score}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+</body>
+</html>

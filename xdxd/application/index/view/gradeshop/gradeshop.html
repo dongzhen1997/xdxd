@@ -1,0 +1,68 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/header"/}
+<!--/meta 作为公共模版分离出去-->
+<header class="g-hd m-topnav-space" id="g-hd">
+    <div class="m-topnav-wrap">
+        <div class=" m-topnav" id="topbar-box">
+            <div class="m-topnavbar">
+                <span class="tit" id="toptitle">积分商城:{$score}积分</span>
+                <div class="btns">
+                    <a href="{:url('index/index/index')}" class="u-topbaridx" title="回首页"></a>
+                    <a href="{:url('index/Center/center')}" class=" u-topbaruser usr" id="j-gousrcenter" title="个人中心"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<ul class="m-ban-items" style="background:linear-gradient(mediumspringgreen,lightskyblue)">
+    {volist name="$list" id="vo"}
+    <li class="item" onclick="buy('{$vo.Id}','{$vo.sale_score}')">
+        <a class="m-ban-goods" href="#">
+            <div class="imgwrap u-img-wrapper">
+                <img src="https://xdxd-pic.oss-cn-beijing.aliyuncs.com/{$vo.thumb}" class=" u-lazyimg-loaded ">
+            </div>
+            <div class="pinfo">
+                <p class="tit f-els-2">{$vo.goodsname}</p>
+                <p class="prices">
+                    <span class="price">积分{$vo.sale_score}</span>
+                </p>
+            </div>
+        </a>
+    </li>
+    {/volist}
+</ul>
+</body>
+{js href="__STATIC__/common/js/jquery-3.1.1.js"}
+{js href="__STATIC__/common/layer/layer.js"}
+{js href="__STATIC__/index/login/js/alert.js"}
+<script>
+    function buy(id,grade) {
+        var that=$(this);
+        layer.confirm('确认花费'+grade+'积分购买？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            $.ajax({
+                url:"{:url('index/Orders/orderPlacgrade')}",
+                type:"post",
+                dataType:"json",
+
+                data:{
+                    Id:parseInt(id),
+                    goodsgrade:parseInt(grade),
+                    usergrade:{$score},
+                },
+                success:function(data){
+                    if(data["code"]==0){
+                        location.href="{:url('index/Orders/orderList')}";
+                    }else if (data["code"]==2) {
+                        dialog.error(data["msg"]);
+                    }else if(data["code"]==1){
+                        location.href="{:url('index/Address/addressAdd')}?id=-1";
+                    }
+                }
+            });
+        },);
+    }
+</script>
+</html>

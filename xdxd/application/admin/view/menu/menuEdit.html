@@ -1,0 +1,195 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"/}
+<!--/meta 作为公共模版分离出去-->
+
+<title> xdxd - 编辑菜单</title>
+</head>
+<body>
+<article class="cl pd-20 mt-10">
+	<form action="{:url('menu/menuEdit')}" method="post" class="form form-horizontal" id="form-member-add">
+		<div class="row cl">
+			<label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>栏目名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$mDetail.carte_name}" placeholder="请输入栏目名称" id="menuname" name="menuname">
+				<input type="hidden" name="menuId" value="{$mDetail.Id}">
+				<input type="hidden" name="__token__" value="{$Request.token}" />
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-3 col-sm-3">访问地址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$mDetail.carte_url}" placeholder="请输入访问地址" id="menu_url" name="menu_url">
+				<p><span>提示:</span><span class="ml-20">index/index</span><span class="ml-20">模块/方法</span></p>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-3 col-sm-3">所属分类：</label>
+			<div class="formControls col-xs-3 col-sm-3">
+				<span class="select-box">
+					<select class="select" size="1" name="menu1" id="menu1">
+						<option value="" selected>一级菜单</option>
+					</select>
+				</span>
+			</div>
+			<div class="formControls col-xs-3 col-sm-3">
+				<span class="select-box" style="display:none;">
+					<select class="select" size="1" name="menu2" id="menu2"></select>
+				</span>
+			</div>
+			<div class="formControls col-xs-3 col-sm-3">
+				<span class="select-box" style="display:none;">
+					<select class="select" size="1" name="menu3" id="menu3"></select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-3 col-sm-3">选择一级分类图标：</label>
+			<div class="formControls col-xs-3 col-sm-3">
+				<span class="select-box">
+					<select class="select" size="1" name="menuico" id="menuico" style="height:22px;font-family: 'FontAwesome', Helvetica;">
+						<option value="" selected>选择图标</option>
+                        <option value=""><i>&#xf26e;</i>图标1</option>
+                        <option value=""><i>&#xf2b9;</i>图标2</option>
+                        <option value=""><i>&#xf0f9;</i>图标3</option>
+                        <option value=""><i>&#xf13d;</i>图标4</option>
+                        <option value=""><i>&#xf209;</i>图标5</option>
+                        <option value=""><i>&#xf17b;</i>图标6</option>
+                        <option value=""><i>&#xf179;</i>图标7</option>
+                        <option value=""><i>&#xf24e;</i>图标8</option>
+					</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl" style="margin-top: 60px">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+
+    /*******************分类三级联动*****************************/
+    var menustr = {$menul};//接收数据
+	// console.log(menustr);
+    var fristMenu = [];//一级分类
+    var secondMenu = [];//二级分类
+    var thirdMenu =[];//三级分类
+	for (var i=0;i<menustr.length;i++) {
+		if (menustr[i].status == 1) {
+            fristMenu.push(menustr[i]);
+		}else if (menustr[i].status == 2) {
+            secondMenu.push(menustr[i]);
+		}else if (menustr[i].status == 3) {
+            thirdMenu.push(menustr[i]);
+        }
+	}
+	//获取select标签
+	var menu1 = document.getElementById("menu1");
+    var menu2 = document.getElementById("menu2");
+    var menu3 = document.getElementById("menu3");
+    var menuhidden =document.getElementById("menuhidden");
+    for (var i in fristMenu) {
+		var opt = document.createElement("option");
+		opt.innerText = fristMenu[i].carte_name;
+		opt.setAttribute("value", fristMenu[i].Id);
+		opt.setAttribute("pId", fristMenu[i].parentId);
+        menu1.appendChild(opt);
+	}
+    //给一级菜单添加change事件，选择菜单，获取二级分类
+    menu1.onchange = function(){
+        //获取一级菜单ID
+        var fid = menu1.value;
+        //先清除原来的数据
+        menu2.parentNode.style.display = "block";
+
+        menu2.innerHTML = "<option value=''>二级菜单</option>";
+
+        menu3.parentNode.style.display = "none";
+        menu3.innerHTML = "";
+        if (menu1.getAttribute("value") == "") {
+            menu2.parentNode.style.display = "none";
+        }
+        //根据一级分类id获取 二级分类列表(遍历一级分类去匹配)
+        for(var i in secondMenu){
+			if(secondMenu[i].parentId == fid){
+				var opt = document.createElement("option");
+				opt.innerText = secondMenu[i].carte_name;
+				opt.setAttribute("value", secondMenu[i].Id);
+                opt.setAttribute("pId", secondMenu[i].parentId);
+                menu2.appendChild(opt);
+			}
+        }
+    }
+    //给二级分类添加change事件，选择二级菜单，获取三级分类
+    menu2.onchange = function(){
+        //获取二级菜单ID
+        var sid = menu2.value;
+        //先清除原来的数据
+        menu3.parentNode.style.display = "block";
+        menu3.innerHTML = "<option value=''>三级菜单</option>";
+        //根据二级分类ID获取三级分类列表
+        for(var i in thirdMenu){
+            if(thirdMenu[i].parentId == sid){
+                var opt = document.createElement("option");
+                opt.innerText = thirdMenu[i].carte_name;
+                opt.setAttribute("value", thirdMenu[i].Id);
+                opt.setAttribute("pId", thirdMenu[i].parentId);
+                menu3.appendChild(opt);
+            }
+        }
+    }
+
+	/***************************************************/
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+	$("#form-member-add").validate({
+		rules:{
+			menuname : {
+				required:true,
+				minlength:2,
+				maxlength:10
+			}
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+            $(form).ajaxSubmit(function (data) {
+                var data = JSON.parse(data);
+                var code = data["code"];
+                var msg = data["msg"];
+                layer.msg(msg,{
+                    time: 0 //不自动关闭
+                    ,btn: ['确定', '留在本界面']
+                    ,yes: function(index){
+                        layer.close(index);
+                        //关闭编辑界面
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.$('.btn-refresh').click();
+                        parent.layer.close(index);
+                    }
+                });
+            });
+		}
+	});
+});
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

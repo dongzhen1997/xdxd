@@ -1,0 +1,54 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"/}
+<!--/meta 作为公共模版分离出去-->
+
+<title> xdxd - 订单列表</title>
+</head>
+<body>
+<!--_header 作为公共模版分离出去-->
+{include file="common/header"/}
+<!--/_header 作为公共模版分离出去-->
+
+<!--_menu 作为公共模版分离出去-->
+{include file="common/menu"/}
+<!--/_menu 作为公共模版分离出去-->
+
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 订单管理 <span class="c-gray en">&gt;</span> 订单分布 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="Hui-article">
+        <div class="">
+            <div class="pd-20">
+                <div class="cl pd-5 bg-1 bk-gray mt-20" style="text-align: center">
+                   <span>订单分布图</span>
+                </div>
+                <div class="mt-20">
+                    <div id="container" style="width:100%; height:560px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+<script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=1.4.10&key=c4abf1fb34c738b4ff608023ba40c103">
+</script>
+<script>
+    var arr=[];
+    var map = new AMap.Map('container',{
+        zoom: 6,  //设置地图显示的缩放级别
+        center: [116.397428, 39.90923],//设置地图中心点坐标
+    });
+    var marklist={$distribution};
+    for(i=0;i<marklist.length;i++){
+        var marker = new AMap.Marker({
+            position: [marklist[i]["Lng"],marklist[i]["Lat"]]  // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+        });
+        arr.push(marker);
+    }
+    map.add(arr);
+</script>
+</body>
+</html>

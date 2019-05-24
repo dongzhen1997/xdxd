@@ -1,0 +1,203 @@
+﻿<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"/}
+<!--/meta 作为公共模版分离出去-->
+
+<title> xdxd - 添加网站角色</title>
+</head>
+<body>
+<article class="cl pd-20">
+	<form action="{:url('admin/adminRoleAdd')}" method="post" class="form form-horizontal" id="form-admin-role-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="请输入角色名称" id="roleName" name="roleName" datatype="*4-16" nullmsg="用户账户不能为空">
+				<input type="hidden" name="__token__" value="{$Request.token}" />
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">角色描述：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="请输入20字以内角色描述" id="r_describe" name="r_describe">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">网站角色：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				{volist name="carteList" id="clist"}
+				<dl class="permission-list">
+					<dt>
+						<label>
+							<input type="checkbox" value="{$clist.Id}" name="menu&{$clist.Id}">
+							{$clist.carte_name}</label>
+					</dt>
+					{volist name="$clist.child" id="son"}
+					<dd>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="{$son.Id}" name="menu&{$son.Id}">
+									<span style="background-color: #9acfea;">{$son.carte_name}</span>
+								</label>
+							</dt>
+							{if $son.child }
+							<div style="margin-top: 25px;margin-left: 80px">
+								{volist name="$son.child" id="grandson"}
+								<dl class="cl permission-list3" style="margin-top: 10px">
+									<dt>
+										<label class="">
+											<input type="checkbox" value="{$grandson.Id}" name="menu&{$grandson.Id}">
+											<span style="background-color: #9dc7e7;">{$grandson.carte_name}</span>
+										</label>
+									</dt>
+									<dd>
+										{if $grandson.c_add eq 1}
+										<label class="">
+											<input type="checkbox" value="1" name="{$grandson.Id}add" id="">
+											添加
+										</label>
+										{/if}
+										{if $grandson.c_edit eq 1}
+										<label class="">
+											<input type="checkbox" value="1" name="{$grandson.Id}edit" id="">
+											修改
+										</label>
+										{/if}
+										{if $grandson.c_del eq 1}
+										<label class="">
+											<input type="checkbox" value="1" name="{$grandson.Id}del" id="">
+											删除
+										</label>
+										{/if}
+										{if $grandson.c_see eq 1}
+										<label class="">
+											<input type="checkbox" value="1" name="{$grandson.Id}see" id="">
+											查看
+										</label>
+										{/if}
+										{if $grandson.c_mind eq 1}
+										<label class="">
+											<input type="checkbox" value="1" name="{$grandson.Id}mind" id="">
+											审核
+										</label>
+										{/if}
+									</dd>
+								</dl>
+								{/volist}
+							</div>
+							{else /}
+							<dd>
+								{if $son.c_add eq 1}
+								<label class="">
+									<input type="checkbox" value="1" name="{$son.Id}add" id="">
+									添加
+								</label>
+								{/if}
+								{if $son.c_edit eq 1}
+								<label class="">
+									<input type="checkbox" value="1" name="{$son.Id}edit" id="">
+									修改
+								</label>
+								{/if}
+								{if $son.c_del eq 1}
+								<label class="">
+									<input type="checkbox" value="1" name="{$son.Id}del" id="">
+									删除
+								</label>
+								{/if}
+								{if $son.c_see eq 1}
+								<label class="">
+									<input type="checkbox" value="1" name="{$son.Id}see" id="">
+									查看
+								</label>
+								{/if}
+								{if $son.c_mind eq 1}
+								<label class="">
+									<input type="checkbox" value="1" name="{$son.Id}mind" id="">
+									审核
+								</label>
+								{/if}
+							</dd>
+							{/if}
+						</dl>
+					</dd>
+					{/volist}
+				</dl>
+				{/volist}
+
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius" id="admin-role-save"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$(".permission-list dt input:checkbox").click(function(){
+		$(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+	});
+	$(".permission-list2 dd input:checkbox").click(function(){
+		var l =$(this).parent().parent().find("input:checked").length;
+		var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+		if($(this).prop("checked")){
+			$(this).closest("dl").find("dt input:checkbox").prop("checked",true);
+			$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+		}
+		else{
+			if(l==0){
+				$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+			}
+			if(l2==0){
+				$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+			}
+		}
+	});
+	
+	$("#form-admin-role-add").validate({
+		rules:{
+			roleName:{
+				required:true,
+                minlength:2,
+                maxlength:10
+			},
+            r_describe : {
+                maxlength:20
+			}
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+            $(form).ajaxSubmit(function (data) {
+                var data = JSON.parse(data);
+                var code = data["code"];
+                var msg = data["msg"];
+                layer.msg(msg,{
+                    time: 0 //不自动关闭
+                    ,btn: ['确定', '留在本界面']
+                    ,yes: function(index){
+                        layer.close(index);
+                        //关闭编辑界面
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }
+                });
+            });
+		}
+	});
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/header"/}
+<!--/meta 作为公共模版分离出去-->
+<body>
+<header class="g-hd m-topnav-space" id="g-hd">
+    <div class="m-topnav-wrap">
+        <div class=" m-topnav" id="topbar-box">
+            <div class="m-topnavbar">
+                <span class="tit" id="toptitle">商品分类</span>
+                <div class="btns">
+                    <a href="{:url('index/index/index')}" class="u-topbaridx" title="回首页"></a>
+                    <a href="{:url('index/user/login_out')}" id="j-topLogin" class="u-topbarlogin">
+                        {if condition="$login"}
+                        退出
+                        {else/}
+                        登录
+                        {/if}
+                    </a>
+                    <a href="#" class="dn u-topbaruser usr" id="j-gousrcenter" title="个人中心"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="livse-ii">
+<ul class="m-resourcelist">
+    <li class="item">
+        <a href="{:url('index/Classify/choose')}?id=1">
+            <img src="__STATIC__/index/common/img/rice.png">
+            <p class="desc " {if condition='$chosen eq 1'} style="color:red" {/if}>精装大米</p>
+        </a>
+    </li>
+    <li class="item">
+        <a href="{:url('index/Classify/choose')}?id=2">
+            <img src="__STATIC__/index/common/img/box.png">
+            <p class="desc" {if condition='$chosen eq 2'} style="color:red" {/if}>精美礼盒</p>
+        </a>
+    </li>
+    <li class="item">
+        <a href="{:url('index/Classify/choose')}?id=3">
+            <img src="__STATIC__/index/common/img/card.png">
+            <p class="desc" {if condition='$chosen eq 3'} style="color:red" {/if}>米卡</p>
+        </a>
+    </li>
+    <li class="item">
+        <a href="{:url('index/Classify/choose')}?id=0">
+            <img src="__STATIC__/index/common/img/all.png">
+            <p class="desc" {if condition='$chosen eq 0'} style="color:red" {/if}>全部</p>
+        </a>
+    </li>
+</ul>
+</div>
+<div id="j-globalpick">
+    <div class="m-scrollload" style="min-height: 0px;">
+        <div class="list_container">
+            <dl class="m-itemlist-col2 f-cb m-itemlist-col2-idx">
+                {volist name="$list" id="vo"}
+                <dd>
+                    <article class="m-itemcol2">
+                        <a href="{:url('index/Details/details')}?Id={$vo.Id}" class="imgwrap">
+                            <img src="https://xdxd-pic.oss-cn-beijing.aliyuncs.com/{$vo.thumb}" class="u-item-img">
+                        </a>
+                        <div class="txtwrap">
+                            <p class="tit"><a href="#">{$vo.goodsname}</a></p>
+                            <p class="mkt-price">原价¥<del>{$vo.price}</del></p>
+                            <p class="act-price">售价¥
+                                <span class="bold">{$vo.sale_price}</span>
+                                <span class="pmo-lbl pmo-lbl-1">5.1折</span>
+                            </p>
+                        </div>
+                    </article>
+                </dd>
+                {/volist}
+            </dl>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>手机登录</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    {css href="__STATIC__/index/login/css/style.css"}
+    {css href="__STATIC__/index/login/css/type.css"}
+    <link rel="icon" type="image/x-icon" href="__STATIC__/common/img/favicon.ico">
+</head>
+<body>
+<section class="aui-flexView">
+    <section class="aui-scrollView">
+        <div class="aui-jop-chang">
+            <h2>手机登录</h2>
+        </div>
+        <div class="aui-jop-top">
+            <div class="aui-jop-top-box">
+                <form action="{:url('index/user/phonelogin')}" method="post">
+                    <div class="aui-flex b-line">
+                        <div class="aui-form-item">
+                            <img src="__STATIC__/index/login/img/iphone.png">
+                        </div>
+                        <div class="aui-flex-box">
+                            <input type="text" placeholder="请输入手机号码" name="tel">
+                        </div>
+                    </div>
+                    <div class="aui-flex b-line">
+                        <div class="aui-form-item">
+                            <img src="__STATIC__/index/login/img/psd.png">
+                        </div>
+                        <div class="aui-flex-box">
+                            <input type="text" placeholder="请输入验证码" name="code">
+                        </div>
+                        <div class="aui-psd">
+                            <a href="javascript:void(0);" onclick="sendSns()">发送验证码</a>
+                        </div>
+                    </div>
+                    <div class="aui-form-button">
+                        <input class="sd" type="submit" value="登录">
+                    </div>
+                    <div class="aui-register aui-register-a">
+                        <a href="{:url('index/User/login')}" style="max-width: 22%;margin: auto;">用户名登录</a>
+                    </div>
+                    <input type="hidden"name="__token__"value="{$Request.token}"/>
+                    <input type="hidden"name="telcode" value="">
+                </form>
+            </div>
+        </div>
+        <div class="aui-register">
+            <div style="max-width: 15%;margin: auto;height: 30px;">
+                <a href="{:url('index/User/regist')}" style="margin: -18px;">注册账号</a>
+            </div>
+        </div>
+    </section>
+    <!--_footer 作为公共模版分离出去-->
+    {include file="/user/footer"/}
+    <!--/footer 作为公共模版分离出去-->
+</section>
+
+
+{js href="__STATIC__/common/js/jquery-3.1.1.js"}
+{js href="__STATIC__/common/js/jquery.validate-1.13.1.js"}
+{js href="__STATIC__/common/js/messages_zh.min.js"}
+{js href="__STATIC__/common/js/jquery.form.js"}
+{js href="__STATIC__/common/layer/layer.js"}
+{js href="__STATIC__/index/login/js/alert.js"}
+<script>
+function sendSns(){
+    var tel=$("input[name='tel']").val();
+    $.ajax({
+        url:"{:url('index/user/sendmsg')}",
+        type:"post",
+        dataType:"json",
+        data:{
+            tel:tel
+        },
+        success:function(data){
+            var code=data["code"];
+            if(code==0){
+                var other=data["param"];
+                layer.alert(data["msg"], {
+                    skin: 'layui-layer-molv' //样式类名
+                    ,closeBtn: 0
+                }, function(){
+                    layer.closeAll();
+                });
+                $("input[name='telcode']").val(other);
+                console.log($("input[name='telcode']").val())
+            }else{
+                dialog.error(JSON.parse(data)["msg"]);
+            }
+        }
+    })
+}
+var validator = $("form").validate({
+    rules:{
+        tel:{
+            required:true,
+            minlength:11,
+            maxlength:11
+        },
+        code:{
+            required:true,
+            minlength:4,
+            maxlength:4
+        }
+    },
+    messages:{
+        tel:{
+            required:"手机号必填",
+        },
+        code:{
+            required:"验证码必填",
+        }
+    },
+    submitHandler:function(form){
+        $("form").ajaxSubmit(function (data) {
+            var obj = JSON.parse(data);
+            if (obj["code"]==0) {
+                dialog.success(obj["msg"],"{:url('index/index/index')}");
+            }else{
+                dialog.error(obj["msg"]);
+            }
+        })
+    }
+});
+</script>
+</body>
+</html>

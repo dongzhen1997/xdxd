@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>确认订单</title>
+
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+
+    {css href="__STATIC__/index/alipay/css/style.css"}
+    <link rel="icon" type="image/x-icon" href="__STATIC__/common/img/favicon.ico">
+
+</head>
+<body style="background:#f7f7f7">
+<section class="aui-flexView">
+    <header class="aui-navBar aui-navBar-fixed">
+        <a href="{:url('index/Shopcar/shopcar')}" class="aui-navBar-item">
+            <i class="icon icon-return"></i>
+        </a>
+        <div class="aui-center">
+            <span class="aui-center-title">确认订单</span>
+        </div>
+    </header>
+    <section class="aui-scrollView">
+        <div class="aui-order-box">
+            <div class="aui-flex aui-choice-white aui-mar15">
+
+                <div class="aui-flex-box">
+                    <div>
+                        联系人：<span>{$addr.linkman}</span>
+                        电话：<span>{$addr.tel}</span> 邮政：<span>{$addr.postalcode}</span>
+                    </div>
+                    <div>
+                        地址：<span>{$addr.province}{$addr.city}{$addr.block}{$addr.addr_detail}</span>
+                    </div>
+                </div>
+              <div class="aui-flex-triangle" style="color:#fff" id="choose" onclick="choose()">.</div>
+            </div>
+            <div class="aui-flex aui-choice-white">
+                <div class="aui-flex-box">
+                    <h1>商品清单</h1>
+                </div>
+            </div>
+            {volist name="list" id="vo"}
+            <div class="aui-flex aui-flex-default aui-mar15">
+                <div class="aui-flex-goods">
+                    <img src="https://xdxd-pic.oss-cn-beijing.aliyuncs.com/{$vo.thumb}">
+                </div>
+                <div class="aui-flex-box">
+                    <h2>{$vo.goodsname}</h2>
+                    <div class="aui-flex aui-flex-clear">
+                        <div class="aui-flex-box">￥{$vo.sale_price}</div>
+                        <div>x {$vo.count}</div>
+                    </div>
+                </div>
+            </div>
+            {/volist}
+
+            <div class="aui-flex aui-choice-white b-line">
+                <div class="aui-flex-box">配送方式</div>
+                <div class="aui-flex-triangle">普通快递</div>
+            </div>
+            <div class="aui-flex aui-choice-white b-line">
+                <div class="aui-flex-box">优惠券</div>
+                <div class="aui-flex-triangle">无可用</div>
+            </div>
+            <div class="aui-flex aui-choice-white  aui-mar15">
+                <div class="aui-flex-box">发票信息</div>
+                <div class="aui-flex-triangle">不可开发票</div>
+            </div>
+
+        </div>
+    </section>
+    <footer class="aui-bar-footer">
+        <div class="aui-flex">
+            <div class="aui-flex-box">
+                应付金额：<em>￥{$total}</em>
+            </div>
+            <div class="aui-btn-button">
+                <form action="{:url('index/Alipay/alipayapi')}" method="post">
+                    <input type="hidden" name="WIDsubject" value="鲜道先得"/>
+                    <input type="hidden" name="WIDtotal_fee" value={$total}/>
+                    <input type="hidden" name="WIDout_trade_no" value={$orderid}>
+                    <input type="submit" value="去支付"/>
+                </form>
+            </div>
+        </div>
+    </footer>
+</section>
+</body>
+{js href="__STATIC__/common/js/jquery-3.1.1.js"}
+<script>
+    function choose() {
+        location.href="{:url('index/Address/addressmodify')}?orderId="+{$orderid};
+    }
+</script>
+</html>

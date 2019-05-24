@@ -1,0 +1,201 @@
+﻿<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"/}
+<!--/meta 作为公共模版分离出去-->
+
+<title> xdxd - 管理员列表</title>
+</head>
+<body>
+<!--_header 作为公共模版分离出去-->
+{include file="common/header"/}
+<!--/_header 作为公共模版分离出去--> 
+
+<!--_menu 作为公共模版分离出去-->
+{include file="common/menu"/}
+<!--/_menu 作为公共模版分离出去-->
+
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i> 首页
+		<span class="c-gray en">&gt;</span>
+		管理员管理
+		<span class="c-gray en">&gt;</span>
+		管理员列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a> </nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="text-c"> 日期范围：
+				<input type="date"  class="begin input-text Wdate" style="width:150px;">
+				<input type="date" max="{$time}" class="end input-text Wdate" style="width:150px;">
+				<input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="" name="">
+				<button type="submit" class="btn btn-success" id="" name="">
+					<i class="Hui-iconfont">&#xe665;</i> 搜用户
+				</button>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray mt-20">
+				<span class="l">
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+					</a>
+					<a href="javascript:;" onclick="admin_add('添加管理员','{:url(\'admin/adminAdd\')}','800','500')" class="btn btn-primary radius">
+						<i class="Hui-iconfont">&#xe600;</i> 添加管理员
+					</a>
+				</span>
+				<span class="r">共有数据：<strong>{$a_count}</strong> 条</span>
+			</div>
+			<table class="table table-border table-bordered table-bg table-sort">
+				<thead>
+					<!--<tr class="text-c">-->
+						<!--<th scope="col" colspan="9" class="f-18">管理员列表</th>-->
+					<!--</tr>-->
+					<tr class="text-c">
+						<th>
+							<input type="checkbox" name="" value="">
+						</th>
+						<th>ID</th>
+						<th>登录名</th>
+						<th>手机</th>
+						<th>邮箱</th>
+						<th>角色</th>
+						<th>加入时间</th>
+						<th>是否已启用</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				{volist name="alist" id="ao"}
+					<tr class="text-c">
+						<td>
+							<input type="checkbox" value="{$ao.Id}">
+						</td>
+						<td>{$ao.Id}</td>
+						<td>{$ao.username}</td>
+						<td>{$ao.tel}</td>
+						<td>{$ao.email}</td>
+						<td>{$ao.role}</td>
+						<td>{$ao.registTime}</td>
+						<td class="td-status">
+							<span class="label label-success radius">已启用</span>
+						</td>
+						<td class="td-manage">
+							<a style="text-decoration:none" onClick="admin_stop(this,'10001')" href="javascript:;" title="停用">
+								<i class="Hui-iconfont">&#xe631;</i>
+							</a>
+							<a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','{:url(\'admin/adminEdit\')}?aid={$ao.Id}','{$ao.Id}','800','500')" class="ml-5" style="text-decoration:none">
+								<i class="Hui-iconfont">&#xe6df;</i>
+							</a>
+							<a title="修改密码" href="javascript:;" class="ml-5" onClick="change_password('修改密码','{:url(\'admin/adminPwd\')}?aid={$ao.Id}&aname={$ao.username}','{$ao.Id}','600','270')" style="text-decoration:none">
+								<i class="Hui-iconfont">&#xe63f;</i>
+							</a>
+							<a title="删除" href="javascript:;" onclick="admin_del(this,'{$ao.Id}')" class="ml-5" style="text-decoration:none">
+								<i class="Hui-iconfont">&#xe6e2;</i>
+							</a>
+						</td>
+					</tr>
+				{/volist}
+				</tbody>
+			</table>
+		</article>
+	</div>
+</section>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+
+$(function(){
+	$('.table-sort').dataTable({
+		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+        "aLengthMenu" :[5,3,10,15],
+		"aoColumnDefs": [
+			//{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+			{"orderable":false,"aTargets":[0,3,4,7,8]}// 制定列不参与排序
+		]
+	});
+	$('.table-sort tbody').on( 'click', 'tr', function () {
+		if ( $(this).hasClass('selected') ) {
+			$(this).removeClass('selected');
+		}else {
+			table.$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
+		}
+	});
+});
+
+/*
+	参数解释：
+	title	标题
+	url		请求的url
+	id		需要操作的数据id
+	w		弹出层宽度（缺省调默认值）
+	h		弹出层高度（缺省调默认值）
+*/
+/*管理员-增加*/
+function admin_add(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+/*管理员-删除*/
+function admin_del(obj,_id){
+    layer.confirm('确认要删除吗？',{
+        btn : ["确定删除","取消"],//按钮
+        yes: function(index) {
+            $.ajax({
+                type: "post",
+                url: "{:url('admin/adminDel')}",
+                async: false,
+                dataType: "json",
+                data: {
+                    id: _id
+                },
+                success: function (data) {
+                    $(obj).parents("tr").remove();
+                    layer.msg(data,{icon:1,time:1000});
+                }
+            });
+            layer.close(index);
+            $(obj).parents("tr").remove();
+        }
+    },function(index){
+        layer.close(index);
+    });
+}
+/*管理员-编辑*/
+function admin_edit(title,url,id,w,h){
+	layer_show(title,url,w,h);
+}
+/*密码-修改*/
+function change_password(title,url,id,w,h){
+    layer_show(title,url,w,h);
+}
+/*管理员-停用*/
+function admin_stop(obj,id){
+	layer.confirm('确认要停用吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		
+		$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_start(this,id)" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
+		$(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">已禁用</span>');
+		$(obj).remove();
+		layer.msg('已停用!',{icon: 5,time:1000});
+	});
+}
+
+/*管理员-启用*/
+function admin_start(obj,id){
+	layer.confirm('确认要启用吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		
+		$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_stop(this,id)" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
+		$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+		$(obj).remove();
+		layer.msg('已启用!', {icon: 6,time:1000});
+	});
+}
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

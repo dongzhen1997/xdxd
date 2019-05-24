@@ -1,0 +1,115 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"/}
+<!--/meta 作为公共模版分离出去-->
+
+<title>xdxd - 抽奖编辑</title>
+</head>
+<body>
+<article class="cl pd-20">
+	<form action="{:url('admin/activity/turntableEdit')}" method="post" class="form form-horizontal" id="form-member-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">奖品等级：</label>
+			<div class="formControls col-xs-6 col-sm-6">
+				<input type="text" class="input-text" value="{$tdetail.level}" placeholder="奖品等级" id="level" name="level">
+				<input type="hidden" id="tid" name="tid" value="{$tdetail.Id}">
+				<input type="hidden" name="__token__" value="{$Request.token}" /><!---表单令牌--->
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">奖品：</label>
+			<div class="formControls col-xs-6 col-sm-6">
+				<input type="text" class="input-text" value="{$tdetail.award}" placeholder="奖品" id="award" name="award">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">数量：</label>
+			<div class="formControls col-xs-6 col-sm-6">
+				<input type="number" class="input-text" value="{$tdetail.num}" placeholder="0" id="num" name="num">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">抽奖概率：</label>
+			<div class="formControls col-xs-6 col-sm-6">
+				<input type="number" class="input-text" step="0.1" value="{$tdetail.possibility}" placeholder="0" id="possibility" name="possibility">
+				<span style="font-size: smaller;margin-left: 5px;color: grey">tip:概率可超过1</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-4 col-sm-4 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+    //获取图片地址
+    $("#headimg").change(function(){
+        var imgTag=$(this).next("img");
+        var imgFile=this.files.item(0);
+        var _url=window.URL.createObjectURL(imgFile);  //获取地址
+        imgTag.attr("src",_url);
+    });
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+	$("#form-member-add").validate({
+		rules:{
+            level:{
+				required:true,
+			},
+            award : {
+                required:true,
+                minlength:2,
+                maxlength:10
+			},
+            num : {
+                required:true,
+			},
+            possibility:{
+				required:true,
+			}
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit(function (data) {
+                var data = JSON.parse(data);
+                var code = data["code"];
+                var msg = data["msg"];
+                layer.msg(msg,{
+                    time: 0 //不自动关闭
+                    ,btn: ['确定', '留在本界面']
+                    ,yes: function(index){
+                        layer.close(index);
+                        //关闭编辑界面
+                        window.parent.parent.location.reload();
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.$('.btn-refresh').click();
+                        parent.layer.close(index);
+
+                    }
+                });
+
+            });
+		}
+	});
+});
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

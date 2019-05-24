@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>邮寄地址管理</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    {css href="__STATIC__/index/address/css/myaddress.css"}
+    <link rel="icon" type="image/x-icon" href="__STATIC__/common/img/favicon.ico">
+</head>
+<body>
+<section class="aui-flexView">
+    <header class="aui-navBar aui-navBar-fixed b-line">
+        <a href="#" class="aui-navBar-item"  onclick="backcf()">
+            <i class="icon icon-return"></i>
+        </a>
+        <div class="aui-center">
+            <span class="aui-center-title">邮寄地址管理</span>
+        </div>
+    </header>
+    <section class="aui-scrollView">
+        <div class="divHeight b-line"></div>
+        <div class="aui-address-box b-line">
+            {volist name="list" id="volist"}
+            {if condition="$volist.Id eq $addr_id"}
+            <div class="aui-flex b-line" onclick="change({$volist.Id})">
+                <div class="aui-flex-box">
+                    <span style=" color: red;">默认</span><h3>{$volist.linkman}{$volist.tel}</h3>
+                    <p>{$volist.province}{$volist.city}{$volist.block}{$volist.addr_detail}</p>
+                    <p>{$volist.postalcode}</p>
+                </div>
+            </div>
+            {/if}
+            {/volist}
+            {volist name="list" id="volist"}
+            {if condition="$volist.Id neq $addr_id"}
+            <div class="aui-flex b-line" onclick="change({$volist.Id})">
+                <div class="aui-flex-box">
+                    <h3>{$volist.linkman}{$volist.tel}</h3>
+                    <p>{$volist.province}{$volist.city}{$volist.block}{$volist.addr_detail}</p>
+                    <p>{$volist.postalcode}</p>
+                </div>
+            </div>
+            {/if}
+            {/volist}
+        </div>
+    </section>
+</section>
+</body>
+
+<script>
+    var orderId="{$orderId}";
+    orderId=JSON.stringify(orderId);
+    function change(id) {
+        location.href="{:url('index/orders/addrmodify')}?orderid="+orderId+"&addrid="+id;
+    }
+    function backcf() {
+        location.href="{:url('index/Orders/confirm')}?orderid="+orderId;
+    }
+</script>
+</html>

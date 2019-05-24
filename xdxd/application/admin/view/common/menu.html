@@ -1,0 +1,24 @@
+<aside class="Hui-aside">
+    <div class="menu_dropdown bk_2">
+        {volist name="role_data['fData']" id="FL"}
+        <dl id="menu-{$FL.carteId}">
+            <dt>
+                <i class="Hui-iconfont">{$FL.iconame}</i> {$FL.carte_name}
+                <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
+            </dt>
+            <dd>
+                <ul>
+                    {volist name="role_data['sData']" id="SL"}
+                    {if $SL.parentId eq $FL.carteId}
+                    <li>
+                        <a href="{if $SL.carte_url neq null} {:url($SL.carte_url)}{/if}" title="{$SL.carte_name}">{$SL.carte_name}</a>
+                    </li>
+                    {/if}
+                    {/volist}
+                </ul>
+            </dd>
+        </dl>
+        {/volist}
+    </div>
+</aside>
+<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>

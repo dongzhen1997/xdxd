@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>重置密码</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    {css href="__STATIC__/index/login/css/style.css"}
+    {css href="__STATIC__/index/login/css/type.css"}
+    <link rel="icon" type="image/x-icon" href="__STATIC__/common/img/favicon.ico">
+</head>
+<body>
+<style>
+    .sd{
+        background:#de442c;
+        width:90%;margin:0 auto;
+        display:block;padding:0.5rem 0;
+        border-radius:20px;border:none;color:#fff;
+    }
+</style>
+<section class="aui-flexView">
+    <section class="aui-scrollView">
+        <div class="aui-jop-chang">
+            <h2>重置密码</h2>
+        </div>
+        <div class="aui-jop-top">
+            <div class="aui-jop-top-box">
+                <form action="{:url('index/user/resetpwd',['uid' => $uid,'user' => $user])}" method="post">
+                    <div class="aui-flex b-line">
+                        <div class="aui-form-item">
+                            <img src="__STATIC__/index/login/img/psd.png" alt="">
+                        </div>
+                        <div class="aui-flex-box">
+                            <input type="pwd" placeholder="请输入6-16位密码" name="pwd">
+                        </div>
+                    </div>
+                    <div class="aui-flex b-line">
+                        <div class="aui-form-item">
+                            <img src="__STATIC__/index/login/img/psd.png" alt="">
+                        </div>
+                        <div class="aui-flex-box">
+                            <input type="pwd" name='repwd' placeholder="请重新输入密码">
+                        </div>
+                    </div>
+                    <div class="aui-form-button">
+                        <input type="submit"value="重置"/>
+                    </div>
+                    <input type="hidden" name="__token__" value="{$Request.token}"/>
+                </form>
+            </div>
+        </div>
+        <div class="aui-register">
+            <a href="{:url('index/User/login')}">返回登录</a>
+        </div>
+    </section>
+    <!--_footer 作为公共模版分离出去-->
+    {include file="/user/footer"/}
+    <!--/footer 作为公共模版分离出去-->
+</section>
+
+</body>
+{js href="__STATIC__/common/js/jquery-3.1.1.js"}
+{js href="__STATIC__/common/js/jquery.validate-1.13.1.js"}
+{js href="__STATIC__/common/js/messages_zh.min.js"}
+{js href="__STATIC__/common/js/jquery.form.js"}
+{js href="__STATIC__/common/layer/layer.js"}
+{js href="__STATIC__/index/login/js/alert.js"}
+<script>
+    var validator = $("form").validate({
+        rules:{
+            pwd:{
+                required:true,
+            },
+            repwd:{
+                required:true,
+            }
+        },
+        messages:{
+            pwd:{
+                required:"密码必填",
+            },
+            repwd:{
+                required:"请重新输入密码",
+            }
+        },
+        submitHandler:function(form){
+            $("form").ajaxSubmit(function (data) {
+                var obj = JSON.parse(data);
+                if (obj["code"]==0) {
+                    dialog.success(obj["msg"],"{:url('index/user/login')}");
+                }else{
+                    dialog.error(obj["msg"]);
+                }
+            })
+        }
+    });
+</script>
+</html>

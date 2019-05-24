@@ -1,0 +1,189 @@
+﻿<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"/}
+<!--/meta 作为公共模版分离出去-->
+
+<title> xdxd - 幸运抽奖 </title>
+<style>
+	.list_lh{ height:300px; overflow:hidden;width: 90%;font-size:12px;
+		margin: auto;}
+	.list_lh li{ padding:10px;background: #e5e5e5;border-bottom:1px solid #fff;}
+</style>
+</head>
+<body>
+<!--_header 作为公共模版分离出去-->
+{include file="common/header"/}
+<!--/_header 作为公共模版分离出去-->
+
+<!--_menu 作为公共模版分离出去-->
+{include file="common/menu"/}
+<!--/_menu 作为公共模版分离出去-->
+
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 活动管理 <span class="c-gray en">&gt;</span> 幸运抽奖 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article row">
+		<article class="cl pd-20 col-xs-8 col-sm-8 col-md-8">
+			<div class="cl pd-5 bg-1 bk-gray mt-20">
+				<span class="l">
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+					</a>
+				</span>
+				<span class="r">共有数据：<strong>54</strong> 条</span>
+			</div>
+			<table class="table table-border table-bordered table-bg table-sort">
+				<thead>
+					<tr>
+						<th class="text-c" scope="col" colspan="7">奖项列表</th>
+					</tr>
+					<tr class="text-c">
+						<th><input type="checkbox" name="" value=""></th>
+						<th>ID</th>
+						<th>奖品等级</th>
+						<th>奖品</th>
+						<th>奖品数量</th>
+						<th>奖品概率</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				{volist name="tList" id="tl"}
+					<tr class="text-c">
+						<td><input type="checkbox" value="{$tl.Id}" name=""></td>
+						<td>{$tl.Id}</td>
+						<td>{$tl.level}</td>
+						<td>{$tl.award}</td>
+						<td>{$tl.num}</td>
+						<td>{$tl.possibility}</td>
+						<td>
+							<a style="text-decoration:none" class="ml-5" onClick="product_edit('抽奖编辑','{:url(\'activity/turntableEdit\')}?id={$tl.Id}','{$tl.Id}','','310')" href="javascript:;" title="编辑">
+								<i class="Hui-iconfont">&#xe6df;</i>
+							</a>
+							<a style="text-decoration:none" class="ml-5" onClick="product_del(this,'10001')" href="javascript:;" title="删除">
+								<i class="Hui-iconfont">&#xe6e2;</i>
+							</a>
+						</td>
+					</tr>
+				{/volist}
+				</tbody>
+			</table>
+		</article>
+		<div class="col-xs-4 col-sm-4 col-md-4" style="margin-top: 3%;height: 600px;background-color: #F5FAFE;border-radius: 5px;padding: 10px;overflow: auto;">
+			<div style="margin: auto;text-align:center;">
+				<h3>中奖用户名单</h3>
+
+				<div style="margin-top: 30px;">
+					<p>
+						<span>用户</span>
+						<span style="margin: 10px 30% 10px 15%">手机号</span>
+						<span>奖品</span>
+					</p>
+					<div class="list_lh">
+						<ul>
+							{volist name="$tUser" id="tu"}
+							<li>
+								<p class="row">
+									<span class="col-xs-3 col-sm-3">{$tu.username}</span>
+									<span class="col-xs-4 col-sm-4">{$tu.tel}</span>
+									<span class="col-xs-5 col-sm-5">抽到了{$tu.award}</span>
+								</p>
+							</li>
+							{/volist}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $('.list_lh li:even').addClass('lieven');
+    });
+    $(function(){
+        $("div.list_lh").myScroll({
+            speed:40, //数值越大，速度越慢
+            rowHeight:68 //li的高度
+        });
+    });
+    (function($){
+        $.fn.myScroll = function(options){
+            //默认配置
+            var defaults = {
+                speed:40,  //滚动速度,值越大速度越慢
+                rowHeight:24 //每行的高度
+            };
+            var opts = $.extend({}, defaults, options),intId = [];
+
+            function marquee(obj, step){
+                obj.find("ul").animate({
+                    marginTop: '-=1'
+                },0,function(){
+                    var s = Math.abs(parseInt($(this).css("margin-top")));
+                    if(s >= step){
+                        $(this).find("li").slice(0, 1).appendTo($(this));
+                        $(this).css("margin-top", 0);
+                    }
+                });
+            }
+            this.each(function(i){
+                var sh = opts["rowHeight"],speed = opts["speed"],_this = $(this);
+                intId[i] = setInterval(function(){
+                    if(_this.find("ul").height()<=_this.height()){
+                        clearInterval(intId[i]);
+                    }else{
+                        marquee(_this, sh);
+                    }
+                }, speed);
+                _this.hover(function(){
+                    clearInterval(intId[i]);
+                },function(){
+                    intId[i] = setInterval(function(){
+                        if(_this.find("ul").height()<=_this.height()){
+                            clearInterval(intId[i]);
+                        }else{
+                            marquee(_this, sh);
+                        }
+                    }, speed);
+                });
+            });
+        }
+    })(jQuery);
+
+
+    $('.table-sort').dataTable({
+        "aaSorting": [[ 1, "asc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            {"orderable":false,"aTargets":[0,3,6]}// 制定列不参与排序
+        ]
+    });
+    /*图片-删除*/
+    function product_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!',{icon:1,time:1000});
+        });
+    }
+    /*图片-编辑*/
+    function product_edit(title,url,id,w,h){
+        var index = layer.open({
+            type: 2,
+            title: title,
+            content: url
+        });
+        layer.full(index);
+    }
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

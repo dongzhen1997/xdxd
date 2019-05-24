@@ -1,0 +1,187 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"/}
+<!--/meta 作为公共模版分离出去-->
+
+<link href="__STATIC__/admin/hui/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="page-container">
+	<form action="{:url('goods/goodsEdit')}" method="post" class="form form-horizontal" id="form-goods-add" enctype="multipart/form-data">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>商品名称：
+			</label>
+			<div class="formControls col-xs-5 col-sm-6">
+				<input type="text" class="input-text" placeholder="请输入商品名称" id="g_name" name="g_name" value="{$gdetail.goodsname}">
+				<input type="hidden" name="__token__" value="{$Request.token}" />
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>分类栏目：
+			</label>
+			<div class="formControls col-xs-3 col-sm-3">
+				<span class="select-box">
+					<select name="g_cid" class="select">
+						<option value="0">请选择分类</option>
+						{volist name="clist" id="cl"}
+						<option {if $cl.Id eq $gdetail.classifyId}checked{/if} value="{$cl.Id}">{$cl.classify_name}</option>
+						{/volist}
+					</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>产品展示价格(促销价)：
+			</label>
+			<div class="formControls col-xs-3 col-sm-3">
+				<input type="number" name="s_price" id="s_price" min="0.00" step="1" value="{$gdetail.sale_price}" class="input-text" style="width:90%">
+				元
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>市场价格(原价):
+			</label>
+			<div class="formControls col-xs-3 col-sm-3">
+				<input type="number" name="g_price" id="g_price" placeholder="" min="0.00" step="1" value="{$gdetail.price}" class="input-text" style="width:90%">
+				元
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>库存：
+			</label>
+			<div class="formControls col-xs-3 col-sm-4">
+				<input type="number" id="g_num" name="g_num" class="input-text" min="0" step="1" value="{$gdetail.num}">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>商品推广位：
+			</label>
+			<div class="formControls col-xs-3 col-sm-3">
+				<span class="select-box">
+					<select name="g_status" class="select">
+						<option value="">请选择推广位</option>
+						<option {if $gdetail.status eq 1}checked{/if} value="1">普通商品</option>
+						<option {if $gdetail.status eq 2}checked{/if} value="2">轮播大图</option>
+						<option {if $gdetail.status eq 3}checked{/if} value="3">首页推广</option>
+						<option {if $gdetail.status eq 4}checked{/if} value="4">首页普通商品</option>
+					</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>商品积分：
+			</label>
+			<div class="formControls col-xs-3 col-sm-3">
+				<input type="number" id="g_score" name="g_score" min="0" step="10" class="input-text" value="{$gdetail.goods_score}">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>图片上传：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<label for="img_input">
+					<img id="imgShow" style="width: 100px;" src="{if $gdetail.thumb}https://xdxd-pic.oss-cn-beijing.aliyuncs.com/{$gdetail.thumb}{else}__STATIC__/common/img/upLoad.png{/if}" alt="">
+					<input id="img_input" name="thumb" type="file" style="opacity: 0;position: absolute;left: 15px;width: 100px;">
+				</label>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">
+				<span class="c-red">*</span>详细内容：
+			</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<textarea id="editor" name="g_content" type="text/plain" style="width:100%;height:400px;">{$gdetail.goods_content}</textarea>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-sm-offset-5 col-xs-offset-5 col-sm-3 col-xs-3 btn btn-primary radius">
+				<label for="goodsbtn">
+					<i class="Hui-iconfont">&#xe632;</i>提交
+					<input id="goodsbtn" type="submit" style="opacity: 0;">
+				</label>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script>
+    $(function(){
+        var ue = UE.getEditor('editor');
+
+        $('#img_input').on('change',function () {
+            var imgurl=URL.createObjectURL($(this)[0].files[0]);
+            $("#imgShow").attr("src",imgurl);
+        });
+
+        $("#form-goods-add").validate({
+            rules:{
+                g_name:{
+                    required:true,
+                    maxlength:10
+                },
+                g_cid:{
+                    required:true,
+                },
+                s_price : {
+                    required:true,
+				},
+                g_price : {
+                    required:true,
+				},
+                g_num : {
+                    required:true,
+				},
+                g_status : {
+                    required:true,
+				},
+                g_score : {
+                    required:true,
+				},
+                g_content : {
+                    required:true,
+                }
+            },
+            onkeyup:false,
+            focusCleanup:true,
+            success:"valid",
+            submitHandler:function(form){
+                $(form).ajaxSubmit(function (data) {
+                    var data = JSON.parse(data);
+                    var code = data["code"];
+                    var msg = data["msg"];
+                    layer.msg(msg,{
+                        time: 0 //不自动关闭
+                        ,btn: ['确定', '留在本界面']
+                        ,yes: function(index){
+                            layer.close(index);
+                            //关闭编辑界面
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.$('.btn-refresh').click();
+                            parent.layer.close(index);
+                        }
+                    });
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{include file="common/meta"/}
+<title>xdxd - 订单详情</title>
+</head>
+<body>
+  <div class="cl pd-20" style=" background-color:#b9def0">
+      <div class="row">
+          <div class="col-sm-6 col-xs-5">
+              <img style="width: 150px;border-radius: 10px;" src="__STATIC__/admin/img/member/3.jpeg" alt="">
+          </div>
+          <div class="col-sm-6 col-xs-6">
+              <h2>{$uname}的订单</h2>
+              <p>
+                <span class="ml-10">订单金额: <span style="margin-left: 20px;">￥<span class="c-red" style="font-size: larger;">{$oDetail[0]["allprice"]}元</span></span></span>
+              </p>
+              <p>
+                <span class="ml-10">状态: <span style="margin-left: 20px;">
+                {if $oDetail[0]["status"] eq 1}
+                    <span style="border-radius: 5px;color: white;background-color: lightgrey;padding: 3px;">未支付</span></span></span>
+                {elseif $oDetail[0]["status"] eq 2}
+                  <span style="border-radius: 5px;color: white;background-color: gold;padding: 3px;">已支付</span></span></span>
+                {else/}
+                  <span style="border-radius: 5px;color: white;background-color: crimson;padding: 3px;">已过期</span></span></span>
+                {/if}
+              </p>
+          </div>
+      </div>
+  </div>
+  <div class="pd-20" style="max-height: 400px;overflow: auto;">
+      {volist name="$oDetail" id="d"}
+      <div class="row" style="height: 90px;margin-bottom: 2%;background-color: whitesmoke;padding: 5px;">
+          <div class="col-sm-3 col-xs-3">
+              <h3>订单商品：</h3>
+          </div>
+          <div class="col-xs-2 col-sm-2">
+              {if $d["thumb"]}
+              <img style="width: 90%;border-radius: 10px;" src="__STATIC__/uploads/admin/goods/{$d['thumb']}" alt="">
+              {else}
+              <img style="width: 90%;border-radius: 10px;" src="__STATIC__/admin/img/member/3.jpeg" alt="">
+              {/if}
+          </div>
+          <div class="col-xs-6 col-sm-6">
+              <div>
+                  <h3>{$d["goodsname"]}</h3>
+              </div>
+              <div>
+                  <div style="display: inline-block">
+                      <span>单价:</span><span style="margin-left: 10px;" class="c-red">￥{$d["sale_price"]}元</span>
+                  </div>
+                  <div style="display: inline-block;margin-left: 20px;">
+                      <span>数量:</span><span style="margin-left: 10px;">{$d["count"]}</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      {/volist}
+      <!--<table class="table">-->
+          <!--<tbody>-->
+          <!--<tr>-->
+              <!--<th class="text-r" width="80">库存：</th>-->
+              <!--<td>123</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+              <!--<th class="text-r" width="80">品牌：</th>-->
+              <!--<td>123</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+              <!--<th class="text-r">规格：</th>-->
+              <!--<td>123</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+              <!--<th class="text-r">厂家地址：</th>-->
+              <!--<td>123</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+              <!--<th class="text-r">厂家：</th>-->
+              <!--<td>123</td>-->
+          <!--</tr>-->
+          <!--</tbody>-->
+      <!--</table>-->
+  </div>
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+</body>
+</html>

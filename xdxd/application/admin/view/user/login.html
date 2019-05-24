@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="__STATIC__/common/img/favicon.ico">
+    <title>鲜道先得后台系统</title>
+    <!------------style.css   背景css------------------->
+    {css href="__STATIC__/admin/css/user/login/style.css"}
+    <!----------------reset.css  登录框的css--------->
+    {css href="__STATIC__/admin/css/user/login/reset.css"}
+    <!--------------------------------------------------------------------------------->
+    {css href="__STATIC__/admin/css/user/login/login.css"}
+
+    {css href="__STATIC__/common/css/bootstrap.css"}
+    {css href="__STATIC__/common/css/bootstrap-theme.css"}
+</head>
+<body>
+<div id="particles-js">
+    <div class="login">
+        <div class="login-top" style="text-align:center;">
+            <h3>管理员密码登录</h3>
+            <hr>
+        </div>
+        <form id="_form" method="post" action="{:url('admin/user/login')}" enctype="multipart/form-data">
+            <div class="login-center clearfix">
+                <div class="login-center-img"><img src="__STATIC__/admin/img/user/login/name.png"/></div>
+                <div class="login-center-input">
+                    <input type="text" id="user" name="user" value="" placeholder="请输入您的用户名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'"/>
+                    <div class="login-center-input-text">用户名</div>
+                </div>
+                <span class="error"></span>
+            </div>
+            <div class="login-center clearfix">
+                <div class="login-center-img"><img src="__STATIC__/admin/img/user/login/password.png"/></div>
+                <div class="login-center-input">
+                    <input type="password" id="pwd" name="pwd" value="" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'"/>
+                    <div class="login-center-input-text">密码</div>
+                </div>
+                <span class="error"></span>
+            </div>
+            <div>
+                <!-----------表单令牌的验证------------->
+                <input type="hidden" name="__token__" value="{$Request.token}" />
+            </div>
+
+            <div class="login-button">
+                <input class="sub_btn" type="submit" value="登录">
+            </div>
+        </form>
+    </div>
+    <div class="sk-rotating-plane"></div>
+</div>
+</body>
+<script>
+    var _url="{:url('admin/index/index')}";
+    console.log(_url);
+</script>
+<!-- scripts -->
+{js href="__STATIC__/admin/js/user/login/particles.min.js"}
+<!--------------app.js   浮点特效-------------------->
+{js href="__STATIC__/admin/js/user/login/app.js"}
+<!--输入框特效-->
+{js href="__STATIC__/admin/js/user/login/view_login.js"}
+
+{js href="__STATIC__/common/js/jquery-3.1.1.js"}
+{js href="__STATIC__/common/js/bootstrap.js"}
+{js href="__STATIC__/common/js/jquery.validate-1.13.1.js"}
+{js href="__STATIC__/common/js/messages_zh.min.js"}
+{js href="__STATIC__/common/js/jquery.form.js"}
+{js href="__STATIC__/common/layer/layer.js"}
+{js href="__STATIC__/index/login/js/alert.js"}
+{js href="__STATIC__/admin/js/user/login/login.js"}
+
+
+</html>

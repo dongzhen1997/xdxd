@@ -1,0 +1,38 @@
+{include file="common/meta"/}
+<title>xdxd - 商品详情</title>
+</head>
+<body>
+  <div class="cl pd-20" style=" background-color:#b9def0">
+      <div class="row">
+          <div class="col-sm-6 col-xs-5">
+              <img src="{if $gDetail.thumb eq null}__STATIC__/admin/img/goods/bg.jpg{else /}https://xdxd-pic.oss-cn-beijing.aliyuncs.com/{$gDetail.thumb}{/if}" style="width: 150px;border-radius: 10px;">
+          </div>
+          <div class="col-sm-6 col-xs-6">
+              <h2>{$gDetail.goodsname}</h2>
+              <p>
+                <span class="ml-10">单价:￥<del>{$gDetail.price}</del></span>
+                <span class="ml-10">促销价:￥<span class="c-red">{$gDetail.sale_price}</span></span>
+              </p>
+              <p>
+                <span class="ml-10">分类:{$gDetail.classify_name}</span>
+                <span class="ml-10">积分:{$gDetail.goods_score}</span>
+              </p>
+          </div>
+      </div>
+  </div>
+  <div class="pd-20">
+      <table class="table">
+          <tbody>
+          <tr>
+              <th class="text-r" width="80">库存：</th>
+              <td>{$gDetail.num}件</td>
+          </tr>
+          </tbody>
+      </table>
+  </div>
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+</body>
+</html>

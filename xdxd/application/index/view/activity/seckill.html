@@ -1,0 +1,120 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/header"/}
+<!--/meta 作为公共模版分离出去-->
+<body>
+<header class="g-hd m-topnav-space" id="g-hd">
+    <div class="m-topnav-wrap">
+        <div class=" m-topnav" id="topbar-box">
+            <div class="m-topnavbar">
+                <span class="tit" id="toptitle">秒杀</span>
+                <div class="btns">
+                    <a href="{:url('index/index/index')}" class="u-topbaridx" title="回首页"></a>
+                    <a href="{:url('index/Center/center')}" class="u-topbaruser usr" id="j-gousrcenter" title="个人中心"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div style="background: linear-gradient(to right,#6830DB , #C76DAC);height: 100px;width: 100%;font-size: 30px;text-align: center">
+        {if condition="$lefttime eq -1"}
+        {$info}
+        {else/}
+        活动正在进行 还剩
+        <li class="left" style="color:darkred"></li>
+        {/if}
+    </div>
+
+<div class="m-scrollload">
+    <div class="list_container">
+
+        <ul class="goodslisttitle j-goodslisttitle">
+            <li class="sep"></li>
+            <li class="text">商品清单</li>
+        </ul>
+        <dl class="daily-goodslist daily-goodslist-1">
+            {volist name="list" id="vo"}
+            <dd class="goods">
+                <a class="pic" href="{:url('index/Details/details')}?Id={$vo.Id}">
+                    <img src="http://xdxd-pic.oss-cn-beijing.aliyuncs.com/{$vo.thumb}" alt="">
+                </a>
+                <ul class="text">
+                    <li class="desc">
+                        <a href="{:url('index/Classify/choose')}?id={$vo.classifyId}">{$vo.classify_name}</a>
+                    </li>
+                    <li>
+                        <a class="title f-els-2" href="{:url('index/Details/details')}?Id={$vo.Id}">{$vo.goodsname}</a>
+                    </li>
+                    <li class="desc">
+                        <a href="{:url('index/Details/details')}?Id={$vo.Id}">剩余{$vo.num}件</a>
+                    </li>
+                    <li class="price"><span class="current">¥{$vo.seckillprice}</span><del class="suggest">¥{$vo.sale_price}</del></li>
+                    {if condition="$lefttime neq -1"}
+                    <li class="cart" onclick="buy({$vo.Id},{$vo.seckillprice})">立即抢购</li>
+                    {/if}
+                </ul>
+            </dd>
+            {/volist}
+        </dl>
+    </div>
+
+</div>
+</body>
+{js href="__STATIC__/common/js/jquery-3.1.1.js"}
+{js href="__STATIC__/common/layer/layer.js"}
+{js href="__STATIC__/index/login/js/alert.js"}
+<script>
+    var lefttime={$lefttime};
+    $(function(){
+        var data=formatSeconds(lefttime);
+        $(".left").html(data);
+    });
+
+    setInterval(function () {
+        lefttime--;
+        var data=formatSeconds(lefttime);
+        $(".left").html(data);
+    },1000);
+    function formatSeconds(value) {
+        var theTime = parseInt(value);// 秒
+        var middle= 0;// 分
+        var hour= 0;// 小时
+
+        if(theTime > 60) {
+            middle= parseInt(theTime/60);
+            theTime = parseInt(theTime%60);
+            if(middle> 60) {
+                hour= parseInt(middle/60);
+                middle= parseInt(middle%60);
+            }
+        }
+        var result = ""+parseInt(theTime)+"秒";
+        if(middle > 0) {
+            result = ""+parseInt(middle)+"分"+result;
+        }
+        if(hour> 0) {
+            result = ""+parseInt(hour)+"小时"+result;
+        }
+        return result;
+    }
+    function buy(id,price) {
+        $.ajax({
+            url:"{:url('index/Activity/seckillbuy')}",
+            type:"post",
+            dataType:"json",
+            data:{
+                id,
+                price,
+            },
+            success:function(data){
+
+                if(data["code"]==0){
+                    location.href="{:url('index/Orders/confirm')}?orderid="+data["param"];
+                }else{
+                    dialog.error(data["msg"]);
+                }
+            }
+        })
+    }
+</script>
+</html>

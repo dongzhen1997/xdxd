@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> xdxd - 秒杀物品</title>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+    <link href="__STATIC__/admin/activity/spikeDetail/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__STATIC__/admin/activity/spikeDetail/css/jquery.bxslider.css" rel="stylesheet" type="text/css">
+    <link href="__STATIC__/admin/activity/spikeDetail/css/detail.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="__STATIC__/admin/activity/spikeDetail/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/activity/spikeDetail/js/jquery.bxslider.js"></script>
+</head>
+<body>
+
+<div data-role="page" id="mypage">
+ 	<div role="main" class="ui-content">
+        <a title="返回上一级" href="{:url('activity/spikeList')}" class="aui-navBar-item" style="z-index: 999">
+            <button><</button>
+        </a>
+		<ul class="sliderlist">
+            <li>
+                <div class="miaosha_list">
+                <div class="img">
+                    <div>
+                        <img src="__STATIC__/admin/activity/spikeDetail/images/miaosha_img1.jpg">
+                        <div class="dw"><img src="__STATIC__/admin/activity/spikeDetail/images/miaosha_position.png"></div>
+                    </div>
+                    <!--<div>-->
+                        <!--<img src="__STATIC__/admin/activity/spikeDetail/images/miaosha_img2.jpg">-->
+                        <!--<div class="dw"><img src="__STATIC__/admin/activity/spikeDetail/images/miaosha_position.png"></div>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--<img src="__STATIC__/admin/activity/spikeDetail/images/miaosha_img3.jpg">-->
+                        <!--<div class="dw"><img src="__STATIC__/admin/activity/spikeDetail/images/miaosha_position.png"></div>-->
+                    <!--</div>-->
+                </div>
+                <div class="textbox">
+                    <div class="text">
+                        [前100名送兔毛手套]反季特价澳洲进口冬季皮毛一体皮草外套中长款长大衣羊毛女装
+                    </div>
+                </div>
+                <div class="money">
+                    <div class="left">
+                        <h2>￥688.00<span>￥2366.00</span><em>海抢购</em></h2>
+                    </div>
+                    <div class="right">
+                        <ul class="time">
+                            <div class="time-text">距离开抢时间：</div>
+                            <li class="hours"></li>
+                            <li class="none">:</li>
+                            <li class="second"></li>
+                            <li class="none">:</li>
+                            <li class="miao"></li>
+                            <div class="clear"></div>
+                        </ul>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="tab">
+                    <p class="tab-hd"><span class="on">图文详情</span><span>评论(1226)</span></p>
+                    <div class="tab-nr">
+                       <div class="tab-innr show">
+                           这里显示图文详情
+                       </div> 
+                       <div class="tab-innr">
+                           这里显示评论列表
+                       </div> 
+                    </div>
+                </div>
+            </div>
+            </li>
+        </ul>    
+  	</div>
+</div>
+    <div id="returnTop"></div>
+    <footer><a href="">抢购即将开始</a></footer>
+<script type="text/javascript">
+// 倒计时
+var startTime = new Date();
+startTime.setFullYear(2016, 1, 1);// 抢购开始年月日
+startTime.setHours(23);
+startTime.setMinutes(59);
+startTime.setSeconds(59);
+startTime.setMilliseconds(999);
+var EndTime=startTime.getTime();
+function GetRTime(){
+	var NowTime = new Date();
+	var nMS = EndTime - NowTime.getTime();
+	var nD = Math.floor(nMS/(1000 * 60 * 60 * 24));
+	var nH = Math.floor(nMS/(1000*60*60)) % 24;
+	var nM = Math.floor(nMS/(1000*60)) % 60;
+	var nS = Math.floor(nMS/1000) % 60;
+	if (nMS < 0){
+		$("#dao").hide();
+		$(".banner_box .time").show();
+	}else{
+	   $(".banner_box .time").show();
+	   $("#daoend").hide();
+	   $("#RemainD").text(nD);
+	   $(".hours").text(nH);
+	   $(".second").text(nM);
+	   $(".miao").text(nS); 
+	}
+    // 倒计时不足10补0
+    if (nH < 10){
+        $(".hours").text( '0' + nH );
+    }else{
+        $(".hours").text(nH);
+    }
+    if (nM < 10){
+        $(".second").text( '0' + nM );
+    }else{
+        $(".second").text(nM);
+    }      
+    if (nS < 10){
+        $(".miao").text( '0' + nS );
+    }else{
+        $(".miao").text(nS);
+   }   
+}
+
+$(document).ready(function () {
+    // 秒杀商品多图滚动
+    // $('.img').bxSlider({
+    //    auto: true,
+    //    pager:false,
+    // });
+
+	var timer_rt = window.setInterval("GetRTime()", 1000);
+    // tab切换
+    $('.tab-hd span').bind('click', function(event) {
+        $(this).addClass('on').siblings().removeClass('on');
+        $('.tab-innr').eq($(this).index()).addClass('show').siblings().removeClass('show');
+    });
+    // 返回顶部
+    $('body').scrollTop(0);
+    $("#returnTop").bind('click',function () {
+            var speed=500;
+            $('body,html').animate({ scrollTop: 0 }, speed);
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

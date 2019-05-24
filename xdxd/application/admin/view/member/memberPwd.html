@@ -1,0 +1,89 @@
+<!--_meta 作为公共模版分离出去-->
+{include file="common/meta"/}
+<!--/meta 作为公共模版分离出去-->
+
+<title>xdxd - 客户密码</title>
+</head>
+<body>
+<article class="cl pd-20">
+	<form action="{:url('member/memberPwd')}" method="post" class="form form-horizontal" id="form-change-password">
+		<div class="row cl">
+			<label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>用户：</label>
+			<div class="formControls col-xs-6 col-sm-7"> {$name} </div>
+			<input type="hidden" name="mid" value="{$id}">
+			<input type="hidden" name="__token__" value="{$Request.token}" />
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>新密码：</label>
+			<div class="formControls col-xs-6 col-sm-7">
+				<input type="password" class="input-text" autocomplete="off" placeholder="请输入新密码" name="pwd" id="pwd">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>确认密码：</label>
+			<div class="formControls col-xs-6 col-sm-7">
+				<input type="password" class="input-text" autocomplete="off" placeholder="请重复输入密码" name="repwd" id="repwd">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-6 col-sm-7 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="common/footer"/}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/hui/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#form-change-password").validate({
+		rules:{
+            pwd:{
+				required:true,
+				minlength:3,
+				maxlength:6
+			},
+            repwd:{
+				required:true,
+				minlength:3,
+				maxlength:6,
+				equalTo: "#pwd"
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit(function (data) {
+                var data = JSON.parse(data);
+                var code = data["code"];
+                var msg = data["msg"];
+                if (code==0){
+                    layer.msg(msg,{icon: 6,time:1000},function () {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.$('.btn-refresh').click();
+                        parent.layer.close(index);
+                    });
+				} else {
+                    layer.msg(msg,{icon: 5,time:1000},function () {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.$('.btn-refresh').click();
+                        parent.layer.close(index);
+                    });
+				}
+
+            });
+		}
+	});
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+
+    <link rel="icon" type="image/x-icon" href="__STATIC__/common/img/favicon.ico">
+
+    {css href="__STATIC__/index/orders/css/style.css"}
+    {js href="__STATIC__/common/js/jquery-3.1.1.js"}
+
+</head>
+<body>
+<section class="aui-flexView">
+    <header class="aui-navBar aui-navBar-fixed b-line">
+        <a href="{:url('index/center/center')}" class="aui-navBar-item">
+            <i class="icon icon-return"></i>
+        </a>
+        <div class="aui-center">
+            <span class="aui-center-title">我的订单</span>
+        </div>
+        <a href="javascript:void(0);" class="aui-navBar-item">
+            <i class="icon icon-more"></i>
+            <!--<span class="badge badge-hollow">9+</span>-->
+        </a>
+    </header>
+    <section class="aui-scrollView">
+        <div class="aui-tab" data-ydui-tab>
+            <ul class="tab-nav">
+                <li class="tab-nav-item  {if condition='$active eq 0'} tab-active {/if}">
+                    <a href="{:url('index/Orders/orderList')}">全部</a>
+                </li>
+                <li class="tab-nav-item  {if condition='$active eq 1'} tab-active {/if}" >
+                    <a href="{:url('index/Orders/orderClassify')}?type=1">待付款</a>
+                    <!--<span class="badge badge-hollow">5</span>-->
+                </li>
+                <li class="tab-nav-item {if condition='$active eq 2'} tab-active {/if}">
+                    <a href="{:url('index/Orders/orderClassify')}?type=2">待发货</a>
+                    <!--<span class="badge badge-hollow">15</span>-->
+                </li>
+                <li class="tab-nav-item">
+                    <a href="javascript:void(0);">待收货</a>
+                </li>
+                <li class="tab-nav-item">
+                    <a href="javascript:void(0);">待评价</a>
+                </li>
+            </ul>
+            <!--<div class="divHeight"></div>-->
+            <div class="tab-panel">
+                {volist name="list" id="vo"}
+                <div class="tab-panel-item tab-active " index="1">
+
+                    <div class="divHeight"></div>
+                    <div class="tab-item" index="1">
+                        <a href="javascript:void(0);" class="aui-well-item aui-well-item-clear b-line">
+                            <div class="aui-well-item-bd">
+                                <h3>{$vo.orderTime}</h3>
+                            </div>
+                            {if condition="$vo.status eq 3"}
+                                <span class="aui-well-item-fr" onclick="delorder('{$vo.orderId}',this)">订单关闭</span>
+                                {elseif condition="$vo.status eq 1"/}
+                                <span class="aui-well-item-fr aui-well-item-fr-clear">
+                                    待付款
+                                </span>
+                                {elseif condition="$vo.status eq 2"/}
+                                <span class="aui-well-item-fr aui-well-item-fr-clear">
+                                    待发货
+                                </span>
+                            {/if}
+                        </a>
+                        {volist name="$vo.goodsname" id="vol"}
+                        <div class="aui-mail-product b-line">
+                            <a href="{:url('index/Details/details')}?Id={$vo.Id[$key]}" class="aui-mail-product-item">
+                                <div class="aui-mail-product-item-hd">
+                                    <img src="https://xdxd-pic.oss-cn-beijing.aliyuncs.com/{$vo.thumb[$key]}" alt="">
+                                </div>
+                                <div class="aui-mail-product-item-bd">
+                                    <p>{$vo.goodsname[$key]}</p>
+                                </div>
+                                <div class="aui-mail-product-right">
+                                    <h4>￥{$vo.sale_price[$key]}</h4>
+                                    <span>x{$vo.count[$key]}</span>
+                                </div>
+                            </a>
+                        </div>
+                        {/volist}
+
+                        <a href="javascript:;" class="aui-mail-payment">
+                            <p>
+                                共<em>1</em>
+                                件商品 实付款: <i>￥{$vo.allprice}</i>
+                            </p>
+                        </a>
+
+                        <div class="aui-mail-button">
+                            {if condition="$vo.status eq 1"}
+                            <a href="{:url('index/Alipay/alipayapi')}?WIDsubject=鲜道先得&WIDtotal_fee={$vo.allprice}&WIDout_trade_no={$vo.orderId}">立即付款</a>
+                            <a href="{:url('index/Orders/cancelorder')}?orderId={$vo.orderId}" class="aui-df-color">取消订单</a>
+                            {elseif condition="$vo.status eq 2"/}
+                            <a href="javascript:;" class="aui-df-color">提醒发货</a>
+                            {else /}
+                            <a href="{:url('index/Details/details')}?Id={$vo.Id[$key]}" class="aui-df-color">再次购买</a>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                {/volist}
+            </div>
+        </div>
+    </section>
+</section>
+</body>
+{js href="__STATIC__/common/js/jquery-3.1.1.js"}
+{js href="__STATIC__/common/layer/layer.js"}
+{js href="__STATIC__/index/login/js/alert.js"}
+
+<script>
+    function delorder($orderId,_this) {
+        layer.confirm('确认删除？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            $.ajax({
+                url:"{:url('index/Orders/delorder')}",
+                type:"post",
+                dataType:"json",
+                data:{
+                    orderId:$orderId
+                },
+                success:function(data){
+                    $(_this).parents(".tab-panel-item").remove();
+                    layer.msg(data["msg"], {icon: 1,time: 2000,});
+                }
+            });
+        },);
+    }
+</script>
+</html>
